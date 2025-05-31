@@ -30,6 +30,6 @@ module.exports.deleteNote = async(req,res)=>{
 }
 
 module.exports.deleteAllNotes= async(req,res)=>{
-    notes = [];
+    notes.length=0;
     res.status(200).json({data:notes});
 }

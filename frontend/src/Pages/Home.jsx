@@ -37,9 +37,11 @@ export default function Home() {
     }
     const handleDeleteAll =async()=>{
         try{
-            const response = await axios.delete("http://localhost:3000/notes/delete");
-            if(response.status==200)
-                setNotes([]);
+            const result = await axios.delete("http://localhost:3000/notes/delete");
+            if(result.status==200){
+                const response = await axios.get("http://localhost:3000/notes/"); 
+                setNotes(response.data.data);
+            }
             else{
                 alert("Notes could not be deleted");
             }
@@ -68,7 +70,7 @@ export default function Home() {
                 <form className="h-full w-full gap-x-3.5 flex" onSubmit={handleSubmit}>
                     <Input name="text" type="text" className={"w-[25%]"} />
                     <Button variant="outline" className="hover:cursor-pointer" >Add Note</Button>
-                    <Button onClick={handleDeleteAll} >Delete All Notes</Button>
+                    <Button className="hover:cursor-pointer" onClick={handleDeleteAll} >Delete All Notes</Button>
                 </form>
             </div>
             <div className="flex flex-wrap gap-10 mt-12 mb-8">
@@ -76,7 +78,7 @@ export default function Home() {
                     notes.map((note, index) => (
                         <div key={note.id} className="flex flex-col items-center">
                             <NoteCard bgColor={bgColors[index % bgColors.length]} text={note.text}/>
-                            <Button className="mt-2 w-[25%]" onClick={()=>handleDelete(note.id)}>Delete Note</Button>
+                            <Button  className="mt-2 w-[25%] hover:cursor-pointer" onClick={()=>handleDelete(note.id)}>Delete Note</Button>
                         </div> ))
                     ) : 
                 ( <p className="text-3xl font-bold">No notes yet</p> )}
